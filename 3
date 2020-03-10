@@ -1,0 +1,34 @@
+#123 Obtener los tapones por partido de los jugadores de los Spurs en la temporada 2005/2006.
+-- Mostrar solo los nombres que tengan como tercera letra la t
+-- Mostrar el nombre de cada jugador, el equipo y su promedio .
+-- Ordenar de mayor a menor media.
+
+SELECT AVG(estadisticas.Tapones_por_partido), estadisticas.jugador, jugadores.Nombre, jugadores.Nombre_equipo from estadisticas
+JOIN jugadores on jugadores.codigo = estadisticas.jugador
+WHERE jugadores.Nombre_equipo = "Spurs" AND jugadores.Nombre LIKE "__t%"
+ORDER BY estadisticas.Tapones_por_partido DESC;
+
+SELECT jugadores.Nombre from jugadores
+WHERE jugadores.Nombre_equipo = "Spurs";
+
+#124 Obtener la temporada o las temporadas en la que tuvo la mayor anotación como local el
+-- equipo donde juega Pau Gasol. Mostrar la temporada, el nombre del equipo la puntuación,
+-- la conferencia y la división.
+SELECT jugadores.Nombre from nba.jugadores
+JOIN partidos JOIN equipos on (partidos.equipo_local = equipos.Nombre
+                                            AND jugadores.Nombre_equipo = equipo.Nombre);
+
+
+#(125) Obtener el nombre del máximo taponeador de los Lakers en las temporada
+-- 2005/2006.
+-- Mostrar Nombre y media de rebotes
+SELECT MAX(estadisticas.Tapones_por_partido), jugadores.Nombre, jugadores.Nombre_equipo FROM estadisticas
+JOIN jugadores on jugadores.codigo = estadisticas.jugador
+WHERE estadisticas.temporada = "05/06" AND jugadores.Nombre_equipo = "Lakers"
+ORDER BY estadisticas.Tapones_por_partido DESC;
+
+SELECT puntos_local, equipo_local, temporada, Conferencia, Division FROM partidos
+INNER JOIN equipos ON (partidos.equipo_local = equipos.nombre)
+WHERE equipo_local = @equipoGasol AND puntos_local =
+                                      ( SELECT MAX(puntos_local) FROM partidos
+                                          WHERE equipo_local=@equipoGasol);
